@@ -765,6 +765,10 @@ When an Institution migrates to a new repository system, or if the record page U
 
 <b>IMPORTANT:</b>So that you don't accidentally delete the 'old' URL IDs, ONLY run this AFTER collection is synced, QA’ed and approved on SOLR TEST but BEFORE syncing to SOLR PROD
 
+**Tips:**
+* If the value being used to match is a URL, it might cause problems with redirect matching--in this case, using the `--exact_match` switch often returns better results
+* Match fields with multiple values can cause issues with SOLR query matching and result in false 'NO MATCH' results. You can find a common string within any extra values and use RegEx to remove like so: `sed -i '/[string from extra value]/d' prod-URLs-26569.json`
+
 In `hrv-prd` role account:
 1. Compare a few "old" and "new" version of records between SOLR/Couch PROD and SOLR/Couch TEST to determine match field to best match records between SOLR PROD and SOLR TEST--ideally an object-unique and unchanging value between records sets on PROD and TEST such as `identifier`
 2. Run `external-redirect-get-solr_prod-id.py [Collection ID] [match field]` , with appropriate [Collection ID] and pre-determined [match field], which will generate a JSON [output file] with the “old” harvest IDs from SOLR PROD and corresponding [match field] value
